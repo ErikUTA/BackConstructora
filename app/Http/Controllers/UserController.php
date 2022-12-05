@@ -70,26 +70,25 @@ class UserController extends Controller
     
 
     public function AuthUser(Request $request)
-    {
-        $input = $request->all();
-        $credentials = $request->only('username', 'password');
-
+    { 
         try {
+            $input = $request->all();
+            $credentials = $request->only('username', 'password');
             if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json(['status'=>'Error','message' => "Credenciales incorrectas"], 422);
             }else{
-                User::where("username", $input['username'])->update(array('token' => $token));
+                $finded = User::where("username", $input['username'])->update(array('token' => $token));
+                $info = User::where("username", $input['username'])->first();
+                $result = array(
+                    "name" => $info->name,
+                    "username" => $info->username,
+                    "role_id" => $info->role_id
+                );
+                return response()->json([ 'status'=> 'Success', 'message' => "Bienvenido", 'data' => $result, 'token' => $token], 200);
             }
         } catch (JWTException $e) {
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
-        $info = User::where("username", $input['username'])->first();
-        $result = array(
-            "name" => $info->name,
-            "username" => $info->username,
-            "role_id" => $info->role_id
-        );
-        return response()->json([ 'status'=> 'Success', 'message' => "Bienvenido", 'data' => $result, 'token' => $token], 200);
     }
 
     public function getAuthenticatedUser()
