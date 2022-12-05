@@ -58,7 +58,7 @@ class UserController extends Controller
     {
         try{
             $users = User::get();
-            return $users;
+            return $users; 
         }catch(JWTException $e){
             return response()->json(["message" => $e], 400);
         }
