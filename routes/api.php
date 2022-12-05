@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 
 Route::post('login',[UserController::class, 'AuthUser']);
 Route::post('register',[UserController::class, 'register']);
+Route::get('users',[UserController::class, 'users']);
 
 Route::group(['middleware' => ['jwt.verify']], function() { 
     Route::get('users',[UserController::class, 'getUsers']);

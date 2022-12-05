@@ -54,6 +54,16 @@ class UserController extends Controller
         }
     }
 
+    public function users()
+    {
+        try{
+            $users = User::get();
+            return $users;
+        }catch(JWTException $e){
+            return response()->json(["message" => $e], 400);
+        }
+    }
+
     public function register(Request $request)
     {
         $user = User::create([
